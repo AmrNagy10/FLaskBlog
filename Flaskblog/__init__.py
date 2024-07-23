@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-
+from flask_login import LoginManager
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 database_path = os.path.join(basedir, 'Database', 'site.db')

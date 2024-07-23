@@ -1,7 +1,12 @@
 from datetime import datetime
-from Flaskblog import db
+from Flaskblog import db, loginmanager
+from flask_login import UserMixin
 
-class User(db.Model):
+@loginmanager.user_loader
+def load_user(user_Id: int):
+    return User.query.get(int(user_Id))
+
+class User(db.Model, UserMixin):
     """Hnadling DataBase User Part"""
     id = db.Column(db.Integer, primary_key=True)
     Username = db.Column(db.String(19), nullable=False)
@@ -12,15 +17,12 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User('{self.Username}, {self.Email}, {self.Image_Files},')"
-    
 class Post(db.Model):
     """Hnadling DataBase Post Part"""
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     post_Date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     Content = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) 
     def __repr__(self):
         return f"Post('{self.title}, {self.post_Date}')"
-

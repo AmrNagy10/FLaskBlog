@@ -3,6 +3,7 @@ from flask import render_template, url_for, flash, redirect
 from Flaskblog import app, db, bcrypt
 from Flaskblog.forms import RegistrationForm, LoginForm
 from Flaskblog.Modules import User, Post
+from flask_login import login_user, current_user, logout_user
 
 
 
@@ -37,6 +38,8 @@ def about():
 @app.route("/register", methods=['GET','POST'])
 def register():
     """Register Page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -50,13 +53,23 @@ def register():
 @app.route("/login", methods=['GET','POST'])
 def login():
     """Login Page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        if form.email.data =="admin@a.com" and form.password.data =="1234567":
-            flash('You are logged in !', 'success')
+        user = User.query.filter_by(Email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.Password, form.password.data):
+            login_user(user=user,remember=form.remember.data)
+            flash('You have been logged in .', 'success')
             return redirect(url_for('home'))
+
         else:
-            flash('Login Unsuccessed, Please check your Email and Password!', 'danger')
-            return redirect(url_for('login'))
+            flash('Login Unsuccessful ! Please try check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
+
+@app.route("/logout")
+def logout():
+    """logout def """
+    logout_user()
+    return redirect(url_for('home'))
 

@@ -1,7 +1,9 @@
+"""importing Modules"""
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError
 from wtforms.validators import DataRequired ,Length, Email, EqualTo
 from Flaskblog.Modules import User
+
 class RegistrationForm(FlaskForm):
     username =  StringField('Username',
                            validators=[DataRequired(), Length(min=3, max=15)])

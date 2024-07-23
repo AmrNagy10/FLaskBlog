@@ -4,7 +4,7 @@ from Flaskblog import db
 class User(db.Model):
     """Hnadling DataBase User Part"""
     id = db.Column(db.Integer, primary_key=True)
-    Username = db.Column(db.String(19), unique=True, nullable=False)
+    Username = db.Column(db.String(19), nullable=False)
     Email = db.Column(db.String(120), unique=True, nullable=False)
     Image_Files = db.Column(db.String(25), nullable=False, default='default.jpg')
     Password = db.Column(db.String(60), nullable=False)

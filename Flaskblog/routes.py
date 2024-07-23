@@ -1,8 +1,10 @@
 """Importing Modules """
 from flask import render_template, url_for, flash, redirect
-from Flaskblog import app
+from Flaskblog import app, db, bcrypt
 from Flaskblog.forms import RegistrationForm, LoginForm
 from Flaskblog.Modules import User, Post
+
+
 
 posts = [
     {
@@ -37,7 +39,11 @@ def register():
     """Register Page"""
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
+        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(Username=form.username.data, Email=form.email.data, Password=hashed_pw) # type: ignore
+        db.session.add(user)
+        db.session.commit()
+        flash('Your Account has been created !', 'success')
         return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
@@ -53,3 +59,4 @@ def login():
             flash('Login Unsuccessed, Please check your Email and Password!', 'danger')
             return redirect(url_for('login'))
     return render_template('login.html', title='Login', form=form)
+

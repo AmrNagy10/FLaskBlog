@@ -1,0 +1,25 @@
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.navbar, .content-section, .list-group-item, .alert {
+    background-color: #1c1c1c;
+    border-color: #333;
+}
+
+.navbar a, .article-title, .article-content, .article-metadata, .list-group-item, .alert {
+    color: #ffffff;
+}
+
+/* Adjust button styles */
+.btn-outline-light {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+.btn-outline-light:hover {
+    color: #000000;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
